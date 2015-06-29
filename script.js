@@ -5,15 +5,14 @@ var ctx = c.getContext("2d");
 c.height = window.innerHeight;
 c.width = window.innerWidth;
 
-// chinese characters - taken from unicode charset
-var chinese = "田由甲申甴电甶男甸甹町画甼甽甾甿畀畁畂畃畄畅畆畇畈畉畊畋界畍畎畏畐畑";
+// the characters
 var gurmukhi = "੧੨੩੪੫੬੭੮੯੦ੳਅਰਤਯਪਸਦਗਹਜਕਲਙੜਚਵਬਨਮੲਥਫਸ਼ਧਘਝਖਲ਼ੜ੍ਹਛਭਣ"
 var sanskrit = "१२३४५६७८९अरतयपसदगहजकलङषचवबनमआथय़फशधघझखळक्षछभणऒ"
 // converting the string into an array of single characters
-chinese = sanskrit.split("");
-console.log("chinese", chinese);
+var characters = sanskrit.split("");
 var font_size = 12;
 var columns = c.width/font_size;    // number of columns for the rain
+
 // an array of drops - one per column
 var drops = [];
 // x below is the x coordinate
@@ -27,20 +26,27 @@ function getColor() {
                 + moment().format('ss')  + ", 0.05)";
 }
 
+function getColorHex() {
+    return "#" + moment().format('HHmmss');   
+}
+
 // drawing the characters
 function draw() {
-    // Black BG for the canvas
+    $("#color").css("background", getColorHex());
+    $('#color').html(getColorHex());
+    
+    // Get the BG color based on the current time i.e. rgb(hh, mm, ss)
     // translucent BG to show trail
     ctx.fillStyle = getColor();
     ctx.fillRect(0, 0, c.width, c.height);
     
-    ctx.fillStyle = "#AAA"; // green text
+    ctx.fillStyle = "#BBB"; // grey text
     ctx.font = font_size + "px arial";
     
     // looping over drops
     for (var i = 0; i < drops.length; i++) {
         // a random chinese character to print
-        var text = chinese[Math.floor(Math.random() * chinese.length)];
+        var text = characters[Math.floor(Math.random() * characters.length)];
         // x = i * font_size, y = value of drops[i] * font_size
         ctx.fillText(text, i * font_size, drops[i] * font_size);
         
