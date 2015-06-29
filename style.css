@@ -1,0 +1,16 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: black;
+}
+
+canvas {
+    display: block;
+}
+
+#time {
+    z-index: 100;
+}
