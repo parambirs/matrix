@@ -1,15 +1,75 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <title>The Matrix</title>
-    </head>
+<head>
+    <meta charset="utf-8">
+    <title>The Matrix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: black;
+        }
+    </style>
+</head>
 <body>
     <canvas id="c"></canvas>
-    <div id="color">#Error</div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
-    <script src="script.js"></script>
+    <script>
+        var c = document.getElementById('c');
+        var ctx = c.getContext('2d');
+
+        // making the canvas full screen
+        c.height = window.innerHeight;
+        c.width = window.innerWidth;
+
+        // the characters
+        var sanskrit = '१२३४५६७८९अरतयपसदगहजकलङषचवबनमआथय़फशधघझखळक्षछभणऒ';
+        var hanzi = "田由甲申甴电甶男甸甹町画甼甽甾甿畀畁畂畃畄畅畆畇畈畉畊畋界畍畎畏畐畑呂"
+        var katakana = "゠クタハムヰアケチヒモヲィコッャンイツヤウゥサフュヵテユヶェショワエトヘヨォスラヱオナリカセニホル・ヌレーキソネロヽノマヮミ"
+        // converting the string into an array of single characters
+        var characters = hanzi.split('');
+        var fontSize = 24;
+        var columns = c.width / fontSize;   // no. of columns for the rain
+
+        // an array of drops - one per column
+        var drops = [];
+
+        // x below is the x coordinate
+        // 1 = y-coordinate of the drop (same for every drop initially)
+        for (var x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        // drawing the characters
+        function draw() {
+            // translucent BG to show trail
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, c.width, c.height);
+
+            ctx.fillStyle = "#03A062"; // green text
+            ctx.font = fontSize + "px arial";
+
+            // looping over drops
+            for (var i = 0; i < drops.length; i++) {
+                // a random character to print
+                var text = characters[Math.floor(Math.random() * characters.length)];
+                // x = i * fontSize, y = value of drops[i] * fontSize
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                // sending the drop back to the top randomly after it has crossed the screen
+                // adding randomness to the reset to make the drops scattered on the Y axis
+                if (drops[i] * fontSize > c.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                // Incrementing Y coordinate
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 35);
+    </script>
 </body>
 </html>
